@@ -1,0 +1,23 @@
+Запрос 1: Найти все книги автора "X"
+
+SELECT b.title, b.book_id
+FROM Book_Authors AS ba
+INNER JOIN Books AS b ON ba.book_id = b.book_id
+INNER JOIN Authors AS a ON ba.author_id = a.author_id
+WHERE a.author_id = 'X';
+
+Запрос 2: Найти всех читателей, которые сейчас держат у себя книгу "Y"
+(используя LEFT JOIN и WHERE ... IS NOT NULL)
+
+SELECT r.readers_id
+FROM Readers AS r
+LEFT JOIN Borrows AS b ON r.readers_id = b.reader_id
+LEFT JOIN Books AS bk ON bk.book_id = b.book_id
+WHERE bk.title = 'Y' AND b.return_date IS NULL;
+
+Запрос 3: Найти все книги, которые ни разу не брали
+
+SELECT b.book_id
+FROM Books AS b
+LEFT JOIN Borrows AS br ON b.book_id = br.book_id
+WHERE br.borrow_id IS NULL;
