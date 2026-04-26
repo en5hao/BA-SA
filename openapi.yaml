@@ -1,0 +1,110 @@
+openapi: 3.0.0
+info:
+  title: Book API
+  description: CRUD операции для управления книгами
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api
+
+paths:
+  /books:
+    get:
+      summary: Получить список всех книг
+      operationId: getAllBooks
+      tags: [Books]
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      summary: Создать новую книгу
+      operationId: createBook
+      tags: [Books]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookRequest'
+      responses:
+        '201':
+          description: Книга успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Неверные данные
+  
+  /books/{id}:
+    get:
+      summary: Получить книгу по ID
+      operationId: getBookById
+      tags: [Books]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Книга найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Книга не найдена
+    delete:
+      summary: Удалить книгу
+      operationId: deleteBook
+      tags: [Books]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Книга успешно удалена
+        '404':
+          description: Книга не найдена
+
+components:
+  schemas:
+    Book:
+      type: object
+      required: [id, title, author]
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+        author:
+          type: string
+        year:
+          type: integer
+        isbn:
+          type: string
+    
+    CreateBookRequest:
+      type: object
+      required: [title, author]
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        year:
+          type: integer
+        isbn:
+          type: string
